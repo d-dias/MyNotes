@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import com.example.dilki.mynotes.data.DataContract;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -220,36 +222,50 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     private void sendMail(String noteType) {
-        String TO = "dilkiedias123@gmail.com";
-        String mailSubject;
-        String mailMassage;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (Objects.equals(noteType, "New note")) {
-                mailSubject = "New note: " + titleString;
-                mailMassage = "You added a new note today.\n" + noteString;
-            } else {
-                mailSubject = "Update note: " + titleString;
-                mailMassage = "You updated a note today.\n" + noteString;
-            }
-        }else {
-            if (noteType == "New note") {
-                mailSubject = "New note: " + titleString;
-                mailMassage = "You added a new note today.\n" + noteString;
-            } else {
-                mailSubject = "Update note: " + titleString;
-                mailMassage = "You updated a note today.\n" + noteString;
-            }
-        }
 
-        try {
-            GMailSender sender = new GMailSender("mynotesbackupmail@gmail.com", "netballSCG123");
-            sender.sendMail(mailSubject,
-                    mailMassage,
-                    TO,
-                    "user@yahoo.com");
-        } catch (Exception e) {
-            Log.e("SendMail", e.getMessage(), e);
-        }
+        Log.i("SendMailActivity", "Send Button Clicked.");
+
+        String fromEmail = "mynotesbackupmail@gmail.com";
+        String fromPassword = "netballSCG123";
+        String toEmails = "dilkiedias123@gmail.com";
+        List toEmailList = Arrays.asList(toEmails
+                .split("\\s*,\\s*"));
+        Log.i("SendMailActivity", "To List: " + toEmailList);
+        String emailSubject = "New note: " + titleString;
+        String emailBody = "You added a new note today.\n" + noteString;
+        new SendMailTask(EditorActivity.this).execute(fromEmail,
+                fromPassword, toEmailList, emailSubject, emailBody);
+
+        //String TO = "dilkiedias123@gmail.com";
+        //String mailSubject;
+        //String mailMassage;
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        //    if (Objects.equals(noteType, "New note")) {
+        //        mailSubject = "New note: " + titleString;
+        //        mailMassage = "You added a new note today.\n" + noteString;
+        //    } else {
+        //        mailSubject = "Update note: " + titleString;
+        //        mailMassage = "You updated a note today.\n" + noteString;
+        //    }
+        //}else {
+        //    if (noteType == "New note") {
+        //        mailSubject = "New note: " + titleString;
+        //        mailMassage = "You added a new note today.\n" + noteString;
+        //    } else {
+        //        mailSubject = "Update note: " + titleString;
+        //        mailMassage = "You updated a note today.\n" + noteString;
+        //    }
+        //}
+//
+        //try {
+        //    GMailSender sender = new GMailSender("mynotesbackupmail@gmail.com", "netballSCG123");
+        //    sender.sendMail(mailSubject,
+        //            mailMassage,
+        //            TO,
+        //            "user@yahoo.com");
+        //} catch (Exception e) {
+        //    Log.e("SendMail", e.getMessage(), e);
+        //}
 
     }
 

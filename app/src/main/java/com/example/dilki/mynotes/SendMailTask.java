@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.util.List;
+
 /**
  * Created by dilki on 04/02/2018.
  */
@@ -13,15 +15,9 @@ public class SendMailTask extends AsyncTask {
 
     private ProgressDialog statusDialog;
     private Activity sendMailActivity;
-    private String mMailSubject;
-    private String mMailMassage;
-    private String mTo;
 
-    public SendMailTask(Activity activity, String mailSubject, String mailMassage, String TO) {
+    public SendMailTask(Activity activity) {
         sendMailActivity = activity;
-        this.mMailSubject = mailSubject;
-        this.mMailMassage = mailMassage;
-        this.mTo = TO;
 
     }
 
@@ -38,23 +34,13 @@ public class SendMailTask extends AsyncTask {
         try {
             Log.i("SendMailTask", "About to instantiate GMail...");
             publishProgress("Processing input....");
-            GMailSender androidEmail = new GMailSender("mynotesbackupmail@gmail.com", "netballSCG123");
+            GMail androidEmail = new GMail(args[0].toString(),
+                    args[1].toString(), (List) args[2], args[3].toString(),
+                    args[4].toString());
             publishProgress("Preparing mail message....");
-            Thread sender = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        GMailSender sender = new GMailSender("mynotesbackupmail@gmail.com", "netballSCG123");
-                        sender.sendMail(mMailSubject,
-                                mMailMassage,
-                                mTo,
-                                "mynotesbackupmail@gmail.com");
-                    } catch (Exception e) {
-                        Log.e("mylog", "Error: " + e.getMessage());
-                    }
-                }
-            });
-            sender.start();
+            androidEmail.createEmailMessage();
+            publishProgress("Sending email....");
+            androidEmail.sendEmail();
             publishProgress("Email Sent.");
             Log.i("SendMailTask", "Mail Sent.");
         } catch (Exception e) {
@@ -74,5 +60,6 @@ public class SendMailTask extends AsyncTask {
     public void onPostExecute(Object result) {
         statusDialog.dismiss();
     }
+
 
 }
