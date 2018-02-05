@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MyNoTes</string>
+    <string name="action_settings">Settings</string>
+    <string name="empty_note_text">You don\'t have any notes yet.  click the button below to add new notes</string>
+    <string name="empty_note_title">It\'s bit lonely here!</string>
+    <string name="failed_to_delete_all_notes">Failed to delete all notes</string>
+    <string name="successfully_deleted_all_notes">Successfully deleted all notes</string>
+    <string name="delete_all_notes_message">You are going to delete all notes. This step can\'t be undone.</string>
+    <string name="delete_all">Delete all</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_title_hint">Add a title</string>
+    <string name="write_note_hint">Write note here!</string>
+    <string name="add_new_note">Add new note</string>
+    <string name="edit_note">Edit note</string>
+    <string name="backup_no">No</string>
+    <string name="backup_yes">Yes</string>
+    <string name="failed_to_insert_new_note">Failed to insert new Note.</string>
+    <string name="successfully_insert_new_note">Successfully insert new note</string>
+    <string name="failed_to_update_note">Failed to update note</string>
+    <string name="successfully_updated_note">Successfully updated note</string>
+    <string name="delete_note_message">You are going to delete this note. Can\'t undone this step.</string>
+    <string name="delete">Delete</string>
+    <string name="editor_delete_pet_failed">Failed to delete note.</string>
+    <string name="editor_delete_pet_successful">Successfully deleted note</string>
+    <string name="action_save">Save</string>
+    <string name="unsaved_changes_dialog_msg">You have unsaved contents. Want to leve without saving?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep editing</string>
+</resources>
