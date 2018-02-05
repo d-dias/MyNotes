@@ -441,13 +441,13 @@ public class EditorActivity extends AppCompatActivity implements
             // Then call setSelection() so that option is displayed on screen as the current selection.
             switch (backup) {
                 case DataContract.DataEntry.BACKUP_NO:
-                    mBackUpSpinner.setSelection(1);
+                    mBackUpSpinner.setSelection(0);
                     break;
                 case DataContract.DataEntry.BACKUP_YES:
-                    mBackUpSpinner.setSelection(2);
+                    mBackUpSpinner.setSelection(1);
                     break;
                 default:
-                    mBackUpSpinner.setSelection(1);
+                    mBackUpSpinner.setSelection(0);
                     break;
             }
         }

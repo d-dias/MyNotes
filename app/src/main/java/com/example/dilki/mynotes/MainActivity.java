@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,12 +68,15 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Log.i("id : ", String.valueOf(id));
+                Log.i("position : ", String.valueOf(position));
+
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
 
                 Uri currentPetUri = ContentUris.withAppendedId(DataContract.DataEntry.CONTENT_URI, id);
                 intent.setData(currentPetUri);
                 startActivity(intent);
-
+                Log.i("index : ", String.valueOf(currentPetUri));
             }
         });
 
