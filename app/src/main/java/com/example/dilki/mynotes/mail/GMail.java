@@ -1,4 +1,4 @@
-package com.example.dilki.mynotes;
+package com.example.dilki.mynotes.mail;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

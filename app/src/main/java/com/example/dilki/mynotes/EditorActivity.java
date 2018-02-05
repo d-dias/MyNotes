@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
@@ -33,6 +32,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.dilki.mynotes.data.DataContract;
+import com.example.dilki.mynotes.mail.SendMailTask;
 
 import java.util.Arrays;
 import java.util.List;
@@ -130,7 +130,7 @@ public class EditorActivity extends AppCompatActivity implements
     private void setupSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
-        ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> genderSpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.array_backup_options, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
@@ -206,8 +206,9 @@ public class EditorActivity extends AppCompatActivity implements
 
             if (mBackUp == 1) {
                 sendMail("Update note");
+            }
 
-            // Show a toast message depending on whether or not the update was successful.
+                // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
 
                 // If no rows were affected, then there was an error with the update.
@@ -217,56 +218,40 @@ public class EditorActivity extends AppCompatActivity implements
                 // Otherwise, the update was successful and we can display a toast.
                 Toast.makeText(this, R.string.successfully_updated_note,
                         Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
     private void sendMail(String noteType) {
 
-        Log.i("SendMailActivity", "Send Button Clicked.");
+        String TO = "dilkiedias123@gmail.com";
+        String mailSubject;
+        String mailMassage;
+
+        if (noteType == "New note") {
+                    mailSubject = "New note: " + titleString;
+                    mailMassage = "You added a new note today.\n" + noteString;
+        } else {
+                    mailSubject = "Update note: " + titleString;
+                    mailMassage = "You updated a note today.\n" + noteString;
+        }
+
+        Log.i("SendMailActivity", "Backup Yes.");
 
         String fromEmail = "mynotesbackupmail@gmail.com";
         String fromPassword = "netballSCG123";
-        String toEmails = "dilkiedias123@gmail.com";
-        List toEmailList = Arrays.asList(toEmails
+        String toEmails = TO;
+        List<String> toEmailList = Arrays.asList(toEmails
                 .split("\\s*,\\s*"));
         Log.i("SendMailActivity", "To List: " + toEmailList);
-        String emailSubject = "New note: " + titleString;
-        String emailBody = "You added a new note today.\n" + noteString;
-        new SendMailTask(EditorActivity.this).execute(fromEmail,
-                fromPassword, toEmailList, emailSubject, emailBody);
+        String emailSubject = mailSubject;
+        String emailBody = mailMassage;
 
-        //String TO = "dilkiedias123@gmail.com";
-        //String mailSubject;
-        //String mailMassage;
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        //    if (Objects.equals(noteType, "New note")) {
-        //        mailSubject = "New note: " + titleString;
-        //        mailMassage = "You added a new note today.\n" + noteString;
-        //    } else {
-        //        mailSubject = "Update note: " + titleString;
-        //        mailMassage = "You updated a note today.\n" + noteString;
-        //    }
-        //}else {
-        //    if (noteType == "New note") {
-        //        mailSubject = "New note: " + titleString;
-        //        mailMassage = "You added a new note today.\n" + noteString;
-        //    } else {
-        //        mailSubject = "Update note: " + titleString;
-        //        mailMassage = "You updated a note today.\n" + noteString;
-        //    }
-        //}
-//
-        //try {
-        //    GMailSender sender = new GMailSender("mynotesbackupmail@gmail.com", "netballSCG123");
-        //    sender.sendMail(mailSubject,
-        //            mailMassage,
-        //            TO,
-        //            "user@yahoo.com");
-        //} catch (Exception e) {
-        //    Log.e("SendMail", e.getMessage(), e);
-        //}
-
+        try {
+            new SendMailTask(EditorActivity.this).execute(fromEmail,
+                    fromPassword, toEmailList, emailSubject, emailBody);
+        } catch (Exception e) {
+            Log.e("SendMail", e.getMessage(), e);
+        }
     }
 
 
@@ -345,8 +330,8 @@ public class EditorActivity extends AppCompatActivity implements
             case R.id.action_save:
                 // save pet to database
                 saveNote();
-                // exit editor
                 finish();
+                // exit editor
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
