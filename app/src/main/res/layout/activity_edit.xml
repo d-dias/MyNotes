@@ -16,39 +16,50 @@
             <!-- Title field -->
             <EditText
                 android:id="@+id/edit_title"
+                style="@style/EditorFieldStyle"
                 android:hint="@string/add_title_hint"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
+                android:inputType="textCapWords" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/spinner_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Backup the note : "
-                android:layout_weight="1"/>
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:text="Backup the note : " />
 
             <Spinner
                 android:id="@+id/backup_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/spinner_text"
                 android:spinnerMode="dropdown"/>
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/backup_spinner"
+                android:gravity="center_vertical"
+                android:text="Date"
+                android:textAlignment="center" />
+        </RelativeLayout>
 
             <!-- note field -->
             <view
-                class="com.example.dilki.mynotes.EditorActivity$LinedEditText"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
                 android:id="@+id/edit_note"
+                class="com.example.dilki.mynotes.EditorActivity$LinedEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="top"
                 android:gravity="top"
-                android:minLines="15"
+                android:inputType="textMultiLine"
                 android:maxLines="100"
-                android:inputType="textMultiLine"/>
+                android:minLines="15" />
     </LinearLayout>
 </ScrollView>

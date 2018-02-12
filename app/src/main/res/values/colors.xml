@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="edit_note_line">#FF2E2A2B</color>
+    <color name="note_color">#e7e73c</color>
+    <color name="note_color_dark">#c0c02b</color>
 </resources>

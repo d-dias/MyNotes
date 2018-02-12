@@ -29,13 +29,20 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dilki.mynotes.data.DataContract;
 import com.example.dilki.mynotes.mail.SendMailTask;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -46,32 +53,30 @@ public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = "EditorActivity";
-
-    /**
-     * EditText field to enter the title
-     */
-    private EditText mTitleEditText;
-
-    /**
-     * EditText field to enter the note
-     */
-    private LinedEditText mNoteEditText;
-
-    /**
-     * EditText field to enter the backup
-     */
-    private Spinner mBackUpSpinner;
-
-    /**
-     * Content URI for the existing pet (null if it's a new pet)
-     */
-    private Uri mCurrentNoteUri;
-
     /**
      * Identifier for the pet data loader
      */
     private static final int EXISTING_NOTE_LOADER = 1;
-
+    /**
+     * EditText field to enter the title
+     */
+    private EditText mTitleEditText;
+    /**
+     * EditText field to enter the note
+     */
+    private LinedEditText mNoteEditText;
+    /**
+     * EditText field to enter the backup
+     */
+    private Spinner mBackUpSpinner;
+    /**
+     * Text field to show date
+     */
+    private TextView mDateText;
+    /**
+     * Content URI for the existing pet (null if it's a new pet)
+     */
+    private Uri mCurrentNoteUri;
     /**
      * Gender of the pet. The possible values are:
      * 0 for unknown gender, 1 for male, 2 for female.
@@ -82,6 +87,13 @@ public class EditorActivity extends AppCompatActivity implements
 
     private String titleString;
     private String noteString;
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mNoteHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +107,8 @@ public class EditorActivity extends AppCompatActivity implements
         mTitleEditText = findViewById(R.id.edit_title);
         mNoteEditText = findViewById(R.id.edit_note);
         mBackUpSpinner = findViewById(R.id.backup_spinner);
+        mDateText = findViewById(R.id.date_text);
+
         LinearLayout editLayout = findViewById(R.id.edit_layout);
 
         if (mCurrentNoteUri == null) {
@@ -103,6 +117,9 @@ public class EditorActivity extends AppCompatActivity implements
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a pet that hasn't been created yet.)
             invalidateOptionsMenu();
+
+            mDateText.setVisibility(View.GONE);
+
         } else {
             setTitle(getString(R.string.edit_note));
 
@@ -114,6 +131,7 @@ public class EditorActivity extends AppCompatActivity implements
             mTitleEditText.clearFocus();
             mNoteEditText.clearFocus();
             editLayout.requestFocus();
+            mDateText.setVisibility(View.VISIBLE);
         }
 
         setupSpinner();
@@ -121,7 +139,6 @@ public class EditorActivity extends AppCompatActivity implements
         mTitleEditText.setOnTouchListener(mTouchListener);
         mNoteEditText.setOnTouchListener(mTouchListener);
         mBackUpSpinner.setOnTouchListener(mTouchListener);
-
     }
 
     /**
@@ -166,10 +183,16 @@ public class EditorActivity extends AppCompatActivity implements
         titleString = mTitleEditText.getText().toString().trim();
         noteString = mNoteEditText.getText().toString().trim();
 
+        String currentDate = getDate();
+        // if (currentDate != null) {
+        //     currentDate = currentDate.substring(0, 5);
+        // }
+
         ContentValues values = new ContentValues();
         values.put(DataContract.DataEntry.COLUMN_TITLE, titleString);
         values.put(DataContract.DataEntry.COLUMN_NOTE, noteString);
         values.put(DataContract.DataEntry.COLUMN_BACKUP, mBackUp);
+        values.put(DataContract.DataEntry.COLUMN_DATE, currentDate);
 
         if (TextUtils.isEmpty(titleString) && TextUtils.isEmpty(noteString)) {
             return;
@@ -221,6 +244,10 @@ public class EditorActivity extends AppCompatActivity implements
         }
     }
 
+    private String getDate() {
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    }
+
     private void sendMail(String noteType) {
 
         String TO = "dilkiedias123@gmail.com";
@@ -253,7 +280,6 @@ public class EditorActivity extends AppCompatActivity implements
             Log.e("SendMail", e.getMessage(), e);
         }
     }
-
 
     private void showDeleteConfirmationDialog() {
 
@@ -402,6 +428,7 @@ public class EditorActivity extends AppCompatActivity implements
                 DataContract.DataEntry._ID,
                 DataContract.DataEntry.COLUMN_TITLE,
                 DataContract.DataEntry.COLUMN_NOTE,
+                DataContract.DataEntry.COLUMN_DATE,
                 DataContract.DataEntry.COLUMN_BACKUP};
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -426,15 +453,18 @@ public class EditorActivity extends AppCompatActivity implements
             int titleColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_TITLE);
             int noteColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_NOTE);
             int backupColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_BACKUP);
+            int dateColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_DATE);
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(titleColumnIndex);
             String note = cursor.getString(noteColumnIndex);
+            String date = cursor.getString(dateColumnIndex);
             int backup = cursor.getInt(backupColumnIndex);
 
             // Update the views on the screen with the values from the database
             mTitleEditText.setText(title);
             mNoteEditText.setText(note);
+            mDateText.setText(date);
 
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
@@ -458,14 +488,6 @@ public class EditorActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            mNoteHasChanged = true;
-            return false;
-        }
-    };
 
     /**
      * This method is called when the back button is pressed.

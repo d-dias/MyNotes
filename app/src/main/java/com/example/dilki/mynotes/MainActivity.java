@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         // Find the ListView which will be populated with the pet data
-        ListView noteListView = findViewById(R.id.list_view);
+        GridView noteListView = findViewById(R.id.list_view);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
@@ -76,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements
                 Uri currentPetUri = ContentUris.withAppendedId(DataContract.DataEntry.CONTENT_URI, id);
                 intent.setData(currentPetUri);
                 startActivity(intent);
-                Log.i("index : ", String.valueOf(currentPetUri));
             }
         });
 
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    //Todo: Use this methode to delete all
     private void showDeleteConfirmationDialog() {
 
         // Create an AlertDialog.Builder and set the message, and click listeners
@@ -165,7 +166,8 @@ public class MainActivity extends AppCompatActivity implements
         String[] projection = {
                 DataContract.DataEntry._ID,
                 DataContract.DataEntry.COLUMN_TITLE,
-                DataContract.DataEntry.COLUMN_NOTE };
+                DataContract.DataEntry.COLUMN_NOTE,
+                DataContract.DataEntry.COLUMN_DATE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context

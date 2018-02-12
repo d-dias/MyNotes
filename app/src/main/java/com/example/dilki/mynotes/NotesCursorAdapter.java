@@ -1,8 +1,10 @@
 package com.example.dilki.mynotes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,24 +54,30 @@ public class NotesCursorAdapter extends CursorAdapter {
      * @param cursor  The cursor from which to get the data. The cursor is already moved to the
      *                correct row.
      */
+    @SuppressLint("ResourceAsColor")
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // TODO: Fill out this method
 
         TextView titleText = view.findViewById(R.id.title_text);
         TextView noteText = view.findViewById(R.id.note_text);
+        TextView dateText = view.findViewById(R.id.date_text);
 
         int titleColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_TITLE);
         int noteColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_NOTE);
+        int dateColumnIndex = cursor.getColumnIndex(DataContract.DataEntry.COLUMN_DATE);
+        int idColumnIndex = cursor.getColumnIndex(DataContract.DataEntry._ID);
 
-        //int currentId = cursor.getInt(idColumnIndex);
+        int currentId = cursor.getInt(idColumnIndex);
+        Log.e("id", String.valueOf(currentId));
         String currentTitle = cursor.getString(titleColumnIndex);
         String currentNote = cursor.getString(noteColumnIndex);
+        String currentDate = cursor.getString(dateColumnIndex);
         //String currentGender = cursor.getString(genderColumnIndex);
         //int currentWeight = cursor.getInt(weightColumnIndex);
 
         titleText.setText(currentTitle);
         noteText.setText(currentNote);
-
+        dateText.setText(currentDate);
     }
 }
