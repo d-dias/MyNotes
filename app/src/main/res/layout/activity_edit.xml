@@ -17,8 +17,11 @@
             <EditText
                 android:id="@+id/edit_title"
                 style="@style/EditorFieldStyle"
+                android:background="@color/note_color"
                 android:hint="@string/add_title_hint"
-                android:inputType="textCapWords" />
+                android:inputType="textCapWords"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,7 +32,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
-                android:text="Backup the note : " />
+                android:text="Backup the note : "
+                android:textStyle="normal" />
 
             <Spinner
                 android:id="@+id/backup_spinner"
@@ -47,7 +51,8 @@
                 android:layout_toRightOf="@id/backup_spinner"
                 android:gravity="center_vertical"
                 android:text="Date"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textStyle="normal" />
         </RelativeLayout>
 
             <!-- note field -->
@@ -57,9 +62,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="top"
+                android:background="@color/note_color"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:maxLines="100"
-                android:minLines="15" />
+                android:minLines="20"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="normal" />
     </LinearLayout>
 </ScrollView>

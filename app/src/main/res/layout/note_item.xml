@@ -24,7 +24,8 @@
             android:layout_height="50dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="16dp" />
@@ -36,18 +37,20 @@
             android:layout_above="@id/date_text"
             android:layout_below="@id/title_text"
             android:ellipsize="end"
-            android:maxLines="7"
+            android:maxLines="5"
             android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textStyle="normal"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="35dp" />
 
         <TextView
             android:id="@+id/date_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:gravity="bottom"
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"

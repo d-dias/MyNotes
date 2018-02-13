@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="edit_note_line">#FF2E2A2B</color>
+    <color name="colorPrimary">#20201c</color>
+    <color name="colorPrimaryDark">#1a190b</color>
+    <color name="colorAccent">#7b8601</color>
+    <color name="edit_note_line">#20201c</color>
     <color name="note_color">#e7e73c</color>
     <color name="note_color_dark">#c0c02b</color>
 </resources>
