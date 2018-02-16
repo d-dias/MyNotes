@@ -6,4 +6,7 @@
     <color name="edit_note_line">#20201c</color>
     <color name="note_color">#e7e73c</color>
     <color name="note_color_dark">#c0c02b</color>
+    <color name="note_color_trans">#ca000000</color>
+    <color name="note_color_full_trans">#00000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

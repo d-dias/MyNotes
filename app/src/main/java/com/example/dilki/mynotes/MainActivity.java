@@ -1,5 +1,6 @@
 package com.example.dilki.mynotes;
 
+import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,6 +13,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,17 +35,20 @@ public class MainActivity extends AppCompatActivity implements
 
     /** Identifier for the pet data loader */
     private static final int NOTE_LOADER = 0;
-
+    public static int items;
     /** Adapter for the ListView */
-    NotesCursorAdapter mCursorAdapter;
+    private NotesCursorAdapter mCursorAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final FrameLayout frame = findViewById(R.id.container);
+        frame.setVisibility(View.GONE);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,14 +76,67 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.i("id : ", String.valueOf(id));
-                Log.i("position : ", String.valueOf(position));
 
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                if (frame.getVisibility() == View.GONE) {
 
-                Uri currentPetUri = ContentUris.withAppendedId(DataContract.DataEntry.CONTENT_URI, id);
-                intent.setData(currentPetUri);
-                startActivity(intent);
+                    frame.setVisibility(View.VISIBLE);
+
+                    ItemPagerFragment fragment = new ItemPagerFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("id", id);
+                    fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragment);
+                    transaction.commit();
+                }
+
+                // final ViewPager viewPager = findViewById(R.id.pager);
+                // PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+                // viewPager.setAdapter(pagerAdapter);
+                // viewPager.setOffscreenPageLimit(3);
+                // viewPager.setPageMargin(100);
+                // viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
+                //     @Override
+                //     public void transformPage(View page, float position) {
+                //         int pageWidth = viewPager.getMeasuredWidth() - viewPager.getPaddingLeft() - viewPager.getPaddingRight();
+                //         int pageHeight = viewPager.getHeight();
+                //         int paddingLeft = viewPager.getPaddingLeft();
+                //         float transformPos = (float) (page.getLeft() - (viewPager.getScrollX() + paddingLeft)) / pageWidth;
+                //         final float normalizedposition = Math.abs(Math.abs(transformPos) - 1);
+                //         page.setAlpha(normalizedposition + 0.5f);
+                //         int max = -pageHeight / 10;
+//
+                // /* Check http://stackoverflow.com/questions/32384789/android-viewpager-smooth-transition-for-this-design
+                //    for other ways to do this.
+                // */
+                //         if (transformPos < -1) { // [-Infinity,-1)
+                //             // This page is way off-screen to the left.
+                //             page.setTranslationY(0);
+                //         } else if (transformPos <= 1) { // [-1,1]
+                //             page.setTranslationY(max * (1 - Math.abs(transformPos)));
+                //         } else { // (1,+Infinity]
+                //             // This page is way off-screen to the right.
+                //             page.setTranslationY(0);
+                //         }
+                //     }
+                // });
+
+                // FragmentManager fm = getFragmentManager();
+                // NoteFragment dialogFragment = new NoteFragment();
+
+                // Supply num input as an argument.
+                // Bundle args = new Bundle();
+                // Uri currentPetUri = ContentUris.withAppendedId(DataContract.DataEntry.CONTENT_URI, id);
+                // args.putString("currentUri", currentPetUri.toString());
+                // dialogFragment.setArguments(args);
+
+                // dialogFragment.show(fm, "Sample Fragment");
+
+                // Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+
+                // Uri currentPetUri = ContentUris.withAppendedId(DataContract.DataEntry.CONTENT_URI, id);
+                // intent.setData(currentPetUri);
+                // startActivity(intent);
             }
         });
 
@@ -181,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        items = data.getCount();
         // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
         mCursorAdapter.swapCursor(data);
     }

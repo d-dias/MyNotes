@@ -26,4 +26,7 @@
     <string name="unsaved_changes_dialog_msg">You have unsaved contents. Want to leve without saving?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep editing</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
